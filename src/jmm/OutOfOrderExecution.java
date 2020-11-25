@@ -11,39 +11,48 @@ public class OutOfOrderExecution {
     private static int a = 0, b = 0;
 
     public static void main(String[] args) throws InterruptedException {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        Thread one = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    countDownLatch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        int i = 0;
+        for (;;){
+            i++;
+            x = 0;
+            y = 0;
+            a = 0;
+            b = 0;
+            CountDownLatch latch = new CountDownLatch(1);
+            Thread one = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    a = 1;
+                    try {
+                        latch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    x = b;
                 }
-                a = 1;
-                x = b;
-            }
-        });
-        Thread two = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    countDownLatch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            });
+            Thread two = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    b = 1;
+                    try {
+                        latch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    y = a;
                 }
-                b = 1;
-                y = a;
+            });
+
+            two.start();
+            one.start();
+            latch.countDown();
+            one.join();
+            two.join();
+            System.out.println("第"+i+"次，x = " + x + ", y = " + y);
+            if (x == 1 && y == 1) {
+                break;
             }
-        });
-
-        two.start();
-        one.start();
-        countDownLatch.countDown();
-        one.join();
-        two.join();
-
-        System.out.println("x = " + x + ", y = " + y);
-
+        }
     }
 }
