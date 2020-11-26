@@ -10,9 +10,11 @@ package jmm;
  * b=3;a=1 由于第二个线程看到了b的修改值，没有看到a的
  *
  * volatile 都是线程已经修改过的最新值
+ *
+ * b在change()中起到了一个触发器的效果
  */
 public class FieldVisibility {
-    volatile int a = 1;
+    int a = 1;
     volatile int b = 2;
 
     public static void main(String[] args) {
