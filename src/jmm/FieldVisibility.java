@@ -8,10 +8,12 @@ package jmm;
  * a = 3,b = 3
  *
  * b=3;a=1 由于第二个线程看到了b的修改值，没有看到a的
+ *
+ * volatile 都是线程已经修改过的最新值
  */
 public class FieldVisibility {
-    int a = 1;
-    int b = 2;
+    volatile int a = 1;
+    volatile int b = 2;
 
     public static void main(String[] args) {
         while (true){
