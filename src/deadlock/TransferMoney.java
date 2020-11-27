@@ -37,7 +37,7 @@ public class TransferMoney implements Runnable{
         }
     }
 
-    private void transferMoney(Account from, Account to, int money) {
+    public static void transferMoney(Account from, Account to, int money) {
         synchronized (from){
 //            try {
 //                Thread.sleep(500);
@@ -55,19 +55,19 @@ public class TransferMoney implements Runnable{
             }
         }
     }
-}
-class Account{
-    int balance;
+    static class Account{
+        int balance;
 
-    public Account(int balance) {
-        this.balance = balance;
-    }
+        public Account(int balance) {
+            this.balance = balance;
+        }
 
-    public int getBalance() {
-        return balance;
-    }
+        public int getBalance() {
+            return balance;
+        }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+        public void setBalance(int balance) {
+            this.balance = balance;
+        }
     }
 }
