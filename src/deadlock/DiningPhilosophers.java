@@ -2,6 +2,7 @@ package deadlock;
 
 /**
  * 哲学家就餐问题
+ * 改变一个哲学家拿筷子的顺序(避免策略)
  */
 public class DiningPhilosophers {
 
@@ -18,7 +19,11 @@ public class DiningPhilosophers {
             //左筷子 从0开始 右筷子 从1开始
             Object leftChopstick = chopsticks[i];
             Object rightChopstick = chopsticks[(i + 1) % chopsticks.length];
-            philosophers[i] = new Philosopher(leftChopstick, rightChopstick);
+            if(i == chopsticks.length - 1){
+                philosophers[i] = new Philosopher(rightChopstick, leftChopstick);
+            }else{
+                philosophers[i] = new Philosopher(leftChopstick, rightChopstick);
+            }
             new Thread(philosophers[i], "哲学家" + (i+1) + "号").start();
         }
     }
