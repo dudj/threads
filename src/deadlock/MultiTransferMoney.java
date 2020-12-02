@@ -21,6 +21,7 @@ public class MultiTransferMoney {
         for (int i = 0; i < accounts.length; i++) {
             accounts[i] = new Account(NUM_MONEY);
         }
+
         class TransferMoneyThread extends Thread{
             @Override
             public void run() {
@@ -28,6 +29,7 @@ public class MultiTransferMoney {
                     int from = rnd.nextInt(NUM_ACCOUNTS);
                     int to = rnd.nextInt(NUM_ACCOUNTS);
                     int money = rnd.nextInt(NUM_MONEY);
+                    System.out.println("账户：" + accounts[from] + "剩余" + accounts[from].balance + "元向账户：" + accounts[to] + "中转" + money + "元");
                     TransferMoney.transferMoney(accounts[from], accounts[to], money);
                 }
             }
