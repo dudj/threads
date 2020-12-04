@@ -1,9 +1,16 @@
 package deadlock;
 
+import java.util.Random;
+
 /**
  * 演示活锁问题
  * 逻辑：
  * 以夫妻吃饭为例，只有一个吃饭的工具。比如：筷子、勺子；在吃饭的时候两者总是谦让 谁饿了谁先吃
+ *
+ * 解决活锁：
+ * 导致原因 重试机制不变，消息队列始终重试，吃饭始终谦让
+ * 以太网的指数退避算法
+ * 加入随机因素
  */
 public class LiveLock {
     static  class Spoon{
@@ -20,7 +27,7 @@ public class LiveLock {
         }
         //使用者
         public synchronized void use(){
-            System.out.println(owner.name + "正在使用");
+            System.out.printf("%s正在使用 ",owner.name);
         }
     }
     static class Diner{
@@ -43,8 +50,10 @@ public class LiveLock {
                     }
                     continue;
                 }
-                //自己如果不是饥饿的 那就让出
-                if(diner.isHungry){
+                //自己如果不是饥饿的 那就让出  if(diner.isHungry){
+                //加入随机性 来解决活锁 ，目前是百分之10的概率 不谦让
+                Random random = new Random();
+                if(diner.isHungry && random.nextInt(10) < 9){
                     System.out.println(this.name + ":" + "哈哈哈，" + diner.name + "你先吃吧");
                     spoon.setOwner(diner);
                     continue;
